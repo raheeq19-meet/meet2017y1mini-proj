@@ -62,7 +62,7 @@ def right():
     
     global direction
     direction=RIGHT
-    print('you pressesd the up key!')
+    print('you pressed the up key!')
     
 turtle.onkeypress(up,UP_ARROW)
 turtle.onkeypress(down,DOWN_ARROW)
@@ -72,12 +72,17 @@ turtle.listen()
 
 def make_food():
     min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
-    max_x=int(SIZE/2/SQUARE_SIZE)-1
+    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
     min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
     max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
     food_x=random.randint(min_x,max_x)*SQUARE_SIZE
     food_y=random.randint(min_y,max_y)*SQUARE_SIZE
-    food.goto(
+    food.goto(food_x,food_y)
+    position=(food_x, food_y)
+    food_pos.append(position)
+    foodie=food.stamp()
+    food_stamps.append(foodie)
+
 def move_snake():
     my_pos=snake.pos()
     x_pos=my_pos[0]
@@ -102,7 +107,9 @@ def move_snake():
         food_pos.pop(food_ind)
         food_stamps.pop(food_ind)
         print("you have eaten the food!")
-        turtle.ontimer(move_snake,TIME_STEP)
+        make_food()
+        
+       
 
     my_pos=snake.pos()
     pos_list.append(my_pos)
@@ -126,6 +133,9 @@ def move_snake():
         quit()
     elif new_y_pos<=DOWN_EDGE:
         print("you hit the upper edge! game over:(")
+        quit()
+    elif pos_list[-1]in pos_list[:-1]:
+        print("you ate yourself:(")
         quit()
     turtle.ontimer(move_snake,TIME_STEP)
 move_snake()
