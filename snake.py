@@ -3,7 +3,7 @@ import random
 turtle.tracer(1,0)
 SIZE_X=800
 SIZE_Y=500
-turtle.setup(SIZE_X, SIZE_Y)
+turtle.setup(SIZE_X+50, SIZE_Y+50)
 turtle.penup()
 SQUARE_SIZE = 20
 START_LENGTH = 1
@@ -43,11 +43,14 @@ UP_EDGE=250
 DOWN_EDGE=-250
 RIGHT_EDGE=400
 LEFT_EDGE=-400
-
-#turtle.penup()
-#turtle.goto(400,280)
-#turtle.pendown()
-#turtle.goto(400,-280)
+turtle_border=turtle.clone()
+turtle_border.goto(400,260)
+turtle_border.pendown()
+turtle_border.goto(400,-260)
+turtle_border.goto(-400,-260)
+turtle_border.goto(-400,260)
+turtle_border.goto(400,260)
+turtle_border.penup()
 def up():
     global direction
     direction=UP
@@ -75,10 +78,10 @@ turtle.onkeypress(right,RIGHT_ARROW)
 turtle.listen()
 
 def make_food():
-    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
-    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
-    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
-    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+    min_x=-int(SIZE_X/3/SQUARE_SIZE)+1
+    max_x=int(SIZE_X/3/SQUARE_SIZE)-1
+    min_y=-int(SIZE_Y/3/SQUARE_SIZE)-1
+    max_y=int(SIZE_Y/3/SQUARE_SIZE)+1
     food_x=random.randint(min_x,max_x)*SQUARE_SIZE
     food_y=random.randint(min_y,max_y)*SQUARE_SIZE
     food.goto(food_x,food_y)
@@ -118,6 +121,8 @@ def move_snake():
         food_stamps.pop(food_ind)
         print("you have eaten the food!")
         make_food()
+        counter()
+    
     else:
         old_stamp=stamp_list.pop(0)
         snake.clearstamp(old_stamp)
@@ -144,6 +149,19 @@ def move_snake():
 
     turtle.ontimer(move_snake,TIME_STEP)
 move_snake()
+
+score_turtle=turtle.clone()
+score=0
+def counter():
+    global score
+    score+=1
+    score_turtle.clear()
+    score_turtle.write(score)
+    score_turtle.goto(390,240)
+    turtle.goto(400,260)
+  
+
+
 turtle.register_shape("trash.gif")
 food=turtle.clone()
 food.shape("trash.gif")
